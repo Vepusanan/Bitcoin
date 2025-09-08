@@ -3,6 +3,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from scipy import stats
 
 def plot_bitcoin_timeseries(btc_data):
     """
