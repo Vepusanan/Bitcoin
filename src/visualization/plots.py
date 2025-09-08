@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
-import numpy as np
-from datetime import datetime
 from scipy import stats
+from pathlib import Path
 
 def plot_bitcoin_timeseries(btc_data):
     """
@@ -33,7 +31,10 @@ def plot_bitcoin_timeseries(btc_data):
     axes[2].grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('results/bitcoin_timeseries.png', dpi=300, bbox_inches='tight')
+    # Ensure results directory exists and save to project-root-relative path
+    results_dir = Path(__file__).resolve().parents[2] / 'results'
+    results_dir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(results_dir / 'bitcoin_timeseries.png', dpi=300, bbox_inches='tight')
     plt.show()
 
 def plot_distribution_analysis(btc_data):
@@ -67,13 +68,18 @@ def plot_distribution_analysis(btc_data):
     axes[1,1].set_ylabel('Daily Return')
     
     plt.tight_layout()
-    plt.savefig('results/distribution_analysis.png', dpi=300, bbox_inches='tight')
+    # Ensure results directory exists and save to project-root-relative path
+    results_dir = Path(__file__).resolve().parents[2] / 'results'
+    results_dir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(results_dir / 'distribution_analysis.png', dpi=300, bbox_inches='tight')
     plt.show()
 
 # Example usage
 if __name__ == "__main__":
     # Load Bitcoin data
-    btc_data = pd.read_csv('data/raw/bitcoin_prices.csv', index_col=0, parse_dates=True)
+    project_root = Path(__file__).resolve().parents[2]
+    data_path = project_root / 'data' / 'raw' / 'bitcoin_prices.csv'
+    btc_data = pd.read_csv(data_path, index_col=0, parse_dates=True)
     
     # Create plots
     plot_bitcoin_timeseries(btc_data)
