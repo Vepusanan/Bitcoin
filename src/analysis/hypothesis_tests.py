@@ -21,9 +21,9 @@ def event_impact_analysis(btc_data, events_data, window_days=10):
         after_end = event_date + timedelta(days=window_days)
 
         # Get volatility data for before and after periods
-        before_data = btc_data[(btc_data.index >= before_start) & 
+        before_data = btc_data[(btc_data.index >= before_start) &
                                (btc_data.index <= before_end)]['Abs_Return'].dropna()
-        after_data = btc_data[(btc_data.index >= after_start) & 
+        after_data = btc_data[(btc_data.index >= after_start) &
                               (btc_data.index <= after_end)]['Abs_Return'].dropna()
 
         # Even if some data exists, continue
@@ -41,10 +41,18 @@ def event_impact_analysis(btc_data, events_data, window_days=10):
         else:
             t_stat, p_value, significant = np.nan, np.nan, False
 
+        # Handle both "type" and "event_type" column names
+        if 'type' in event.index:
+            event_type = event['type']
+        elif 'event_type' in event.index:
+            event_type = event['event_type']
+        else:
+            event_type = "unknown"
+
         results.append({
             'event_id': event['event_id'],
             'event': event['event'],
-            'event_type': event['type'],
+            'event_type': event_type,
             'severity': event['severity'],
             'before_volatility_mean': before_mean,
             'after_volatility_mean': after_mean,
@@ -99,15 +107,25 @@ def correlation_analysis(btc_data, events_data, window_days=10):
 
 
 if __name__ == "__main__":
-    # Load data
-    btc_data = pd.read_csv('data/raw/bitcoin_prices.csv', index_col=0, parse_dates=True)
+    # Load Bitcoin data
+    btc_data = pd.read_csv(
+        'data/raw/bitcoin_prices.csv',
+        index_col=0,
+        parse_dates=True,
+        date_parser=lambda x: pd.to_datetime(x, format="%Y-%m-%d", errors="coerce")
+    )
     btc_data.index = pd.to_datetime(btc_data.index, errors='coerce')  # ensure datetime index
 
+    # Load events data
     events_data = pd.read_csv('data/processed/market_events.csv', parse_dates=['date'])
+
+    # Debug: show column names to confirm structure
+    print("Events Data Columns:", events_data.columns.tolist())
+    print(events_data.head())
 
     # Perform event impact analysis
     impact_results = event_impact_analysis(btc_data, events_data)
-    print("Event Impact Results:")
+    print("\nEvent Impact Results:")
     print(impact_results.head())
 
     # Perform correlation analysis
