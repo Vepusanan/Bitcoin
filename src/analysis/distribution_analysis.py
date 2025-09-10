@@ -35,7 +35,7 @@ def test_normality_comprehensive(bitcoin_returns):
     results['anderson_darling'] = {
         'test_statistic': ad_result.statistic,
         'critical_values': ad_result.critical_values,
-        'significance_levels': ad_result.significance_levels
+        'significance_levels': ad_result.significance_level
     }
     
     return results

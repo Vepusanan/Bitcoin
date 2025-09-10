@@ -10,8 +10,18 @@ def plot_bitcoin_timeseries(btc_data):
     """
     fig, axes = plt.subplots(3, 1, figsize=(15, 12))
     
-    # Bitcoin price over time
-    axes[0].plot(btc_data.index, btc_data['Close'], color='orange', linewidth=1)
+    # Bitcoin price over time - handle different possible column names
+    close_col = None
+    for col in ['Close', 'close', 'Close_', 'BTC-USD', 'Close_BTC-USD']:
+        if col in btc_data.columns:
+            close_col = col
+            break
+    
+    if close_col is None:
+        print(f"Error: No close price column found. Available columns: {btc_data.columns.tolist()}")
+        return
+    
+    axes[0].plot(btc_data.index, btc_data[close_col], color='orange', linewidth=1)
     axes[0].set_title('Bitcoin Price Over Time (2020-2024)', fontsize=14, fontweight='bold')
     axes[0].set_ylabel('Price (USD)')
     axes[0].grid(True, alpha=0.3)
@@ -43,7 +53,18 @@ def plot_distribution_analysis(btc_data):
     """
     Create distribution plots for Bitcoin returns
     """
-    returns = btc_data['Daily_Return'].dropna()
+    # Handle different possible column names for Daily_Return
+    returns_col = None
+    for col in ['Daily_Return', 'daily_return', 'Daily_Return_BTC-USD']:
+        if col in btc_data.columns:
+            returns_col = col
+            break
+    
+    if returns_col is None:
+        print(f"Error: No Daily_Return column found. Available columns: {btc_data.columns.tolist()}")
+        return
+    
+    returns = btc_data[returns_col].dropna()
     
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
     
@@ -87,15 +108,10 @@ if __name__ == "__main__":
         print(f"Error: CSV file not found at {data_path}")
         sys.exit(1)
 
-    # Load Bitcoin data with robust date parsing
-    btc_data = pd.read_csv(
-        data_path,
-        index_col=0,
-        parse_dates=True,
-        date_parser=lambda x: pd.to_datetime(x, format='%Y-%m-%d', errors='coerce')
-    )
-
-    # Drop rows where index could not be parsed
+    # Load Bitcoin data with proper handling of multi-row headers
+    btc_data = pd.read_csv(data_path, skiprows=2)  # Skip the first 2 rows with metadata
+    btc_data['Date'] = pd.to_datetime(btc_data['Date'], errors='coerce')
+    btc_data = btc_data.set_index('Date')
     btc_data = btc_data[btc_data.index.notna()]
 
     print("Index type:", btc_data.index.dtype)

@@ -107,17 +107,17 @@ def correlation_analysis(btc_data, events_data, window_days=10):
 
 
 if __name__ == "__main__":
-    # Load Bitcoin data
-    btc_data = pd.read_csv(
-        'data/raw/bitcoin_prices.csv',
-        index_col=0,
-        parse_dates=True,
-        date_parser=lambda x: pd.to_datetime(x, format="%Y-%m-%d", errors="coerce")
-    )
-    btc_data.index = pd.to_datetime(btc_data.index, errors='coerce')  # ensure datetime index
+    # Get project root directory
+    project_root = Path(__file__).resolve().parents[2]
+    
+    # Load Bitcoin data with proper handling of multi-row headers
+    btc_data = pd.read_csv(project_root / 'data' / 'raw' / 'bitcoin_prices.csv', skiprows=2)
+    btc_data['Date'] = pd.to_datetime(btc_data['Date'], errors='coerce')
+    btc_data = btc_data.set_index('Date')
+    btc_data = btc_data[btc_data.index.notna()]
 
     # Load events data
-    events_data = pd.read_csv('data/processed/market_events.csv', parse_dates=['date'])
+    events_data = pd.read_csv(project_root / 'data' / 'processed' / 'market_events.csv', parse_dates=['date'])
 
     # Debug: show column names to confirm structure
     print("Events Data Columns:", events_data.columns.tolist())

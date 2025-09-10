@@ -98,10 +98,14 @@ def save_events_data(events_df, filename='market_events.csv'):
     """
     Save events data to CSV file
     """
-    if not os.path.exists('data/processed'):
-        os.makedirs('data/processed')
+    # Get the project root directory (3 levels up from this file)
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    data_dir = os.path.join(project_root, 'data', 'processed')
     
-    filepath = f'data/processed/{filename}'
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    
+    filepath = os.path.join(data_dir, filename)
     events_df.to_csv(filepath, index=False)
     print(f"Events data saved to {filepath}")
 

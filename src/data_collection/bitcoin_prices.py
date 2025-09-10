@@ -11,7 +11,10 @@ def collect_bitcoin_data(start_date='2020-01-01', end_date='2024-12-31'):
     print("Downloading Bitcoin data...")
     try:
         # Download Bitcoin data
-        btc = yf.download('BTC-USD', start=start_date, end=end_date)
+        btc = yf.download('BTC-USD', start=start_date, end=end_date, auto_adjust=False)
+        
+        # Reset index to make Date a column
+        btc = btc.reset_index()
         
         # Calculate daily returns
         btc['Daily_Return'] = btc['Close'].pct_change()
@@ -25,6 +28,9 @@ def collect_bitcoin_data(start_date='2020-01-01', end_date='2024-12-31'):
         # Remove NaN values
         btc = btc.dropna()
         
+        # Set Date as index
+        btc = btc.set_index('Date')
+        
         print(f"Data collected successfully: {len(btc)} records")
         return btc
         
@@ -36,10 +42,14 @@ def save_bitcoin_data(data, filename='bitcoin_prices.csv'):
     """
     Save Bitcoin data to CSV file
     """
-    if not os.path.exists('data/raw'):
-        os.makedirs('data/raw')
+    # Get the project root directory (3 levels up from this file)
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    data_dir = os.path.join(project_root, 'data', 'raw')
     
-    filepath = f'data/raw/{filename}'
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    
+    filepath = os.path.join(data_dir, filename)
     data.to_csv(filepath)
     print(f"Data saved to {filepath}")
 
