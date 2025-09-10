@@ -1,23 +1,22 @@
 import pandas as pd
 import numpy as np
 from scipy import stats
-import matplotlib.pyplot as plt
-import seaborn as sns
 import sys
 from pathlib import Path
+
 
 def calculate_descriptive_stats(btc_data):
     """
     Calculate comprehensive descriptive statistics for Bitcoin data
     """
-    # Ensure numeric columns are numeric
-    numeric_cols = ['Close', 'High', 'Low', 'Open', 'Volume', 'Daily_Return', 'Volatility_30d', 'Abs_Return']
+    numeric_cols = ['Close', 'High', 'Low', 'Open', 'Volume',
+                    'Daily_Return', 'Volatility_30d', 'Abs_Return']
     for col in numeric_cols:
-        btc_data[col] = pd.to_numeric(btc_data[col], errors='coerce')  # Convert bad data to NaN
+        btc_data[col] = pd.to_numeric(btc_data[col], errors='coerce')
 
     stats_dict = {}
 
-    # Basic statistics for returns
+    # Returns
     returns = btc_data['Daily_Return'].dropna()
     stats_dict['returns'] = {
         'count': len(returns),
@@ -32,7 +31,7 @@ def calculate_descriptive_stats(btc_data):
         'q75': returns.quantile(0.75)
     }
 
-    # Basic statistics for volatility
+    # Volatility
     volatility = btc_data['Volatility_30d'].dropna()
     stats_dict['volatility'] = {
         'count': len(volatility),
@@ -45,7 +44,7 @@ def calculate_descriptive_stats(btc_data):
         'kurtosis': stats.kurtosis(volatility)
     }
 
-    # Basic statistics for prices
+    # Prices
     prices = btc_data['Close'].dropna()
     stats_dict['prices'] = {
         'count': len(prices),
@@ -65,7 +64,7 @@ def test_normality(data_series, alpha=0.05):
     """
     results = {}
 
-    # Shapiro-Wilk test (for smaller samples)
+    # Shapiro-Wilk test
     if len(data_series) <= 5000:
         shapiro_stat, shapiro_p = stats.shapiro(data_series)
         results['shapiro'] = {
@@ -98,33 +97,40 @@ def test_normality(data_series, alpha=0.05):
 
 
 if __name__ == "__main__":
-    # Load Bitcoin data safely
+    # Paths
     data_path = Path('data/raw/bitcoin_prices.csv')
+    results_path = Path("results")
+    results_path.mkdir(parents=True, exist_ok=True)
 
     if not data_path.exists():
         print(f"Error: CSV file not found at {data_path}")
         sys.exit(1)
 
+    # Load data
     btc_data = pd.read_csv(
         data_path,
         index_col=0,
         parse_dates=True,
         date_parser=lambda x: pd.to_datetime(x, errors='coerce')
     )
-
-    # Drop rows where index could not be parsed
     btc_data = btc_data[btc_data.index.notna()]
 
-    # Ensure numeric columns are numeric
-    numeric_cols = ['Close', 'High', 'Low', 'Open', 'Volume', 'Daily_Return', 'Volatility_30d', 'Abs_Return']
-    for col in numeric_cols:
-        btc_data[col] = pd.to_numeric(btc_data[col], errors='coerce')
-
-    # Calculate descriptive statistics
+    # Calculate stats
     desc_stats = calculate_descriptive_stats(btc_data)
     normality_results = test_normality(btc_data['Daily_Return'].dropna())
 
+    # Print to terminal
     print("Descriptive Statistics:")
     print(desc_stats)
     print("\nNormality Test Results:")
     print(normality_results)
+
+    # Save to file
+    output_file = results_path / "descriptive_stats.txt"
+    with open(output_file, "w") as f:
+        f.write("Descriptive Statistics:\n")
+        f.write(str(desc_stats))
+        f.write("\n\nNormality Test Results:\n")
+        f.write(str(normality_results))
+
+    print(f"\nResults saved to {output_file}")
