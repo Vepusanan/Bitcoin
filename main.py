@@ -9,8 +9,6 @@ This script runs the complete Bitcoin volatility analysis pipeline:
 4. Hypothesis testing (event impact analysis)
 5. Visualization generation
 
-Author: Bitcoin Analysis Project
-Date: 2024
 """
 
 import sys
