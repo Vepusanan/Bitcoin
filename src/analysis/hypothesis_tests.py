@@ -111,7 +111,12 @@ if __name__ == "__main__":
     project_root = Path(__file__).resolve().parents[2]
     
     # Load Bitcoin data with proper handling of multi-row headers
-    btc_data = pd.read_csv(project_root / 'data' / 'raw' / 'bitcoin_prices.csv', skiprows=2)
+    btc_data = pd.read_csv(project_root / 'data' / 'raw' / 'bitcoin_prices.csv', skiprows=2, header=0)
+    
+    # Set proper column names based on the first row of the original CSV
+    column_names = ['Date', 'Price', 'Close', 'High', 'Low', 'Open', 'Volume', 'Daily_Return', 'Volatility_30d', 'Abs_Return']
+    btc_data.columns = column_names
+    
     btc_data['Date'] = pd.to_datetime(btc_data['Date'], errors='coerce')
     btc_data = btc_data.set_index('Date')
     btc_data = btc_data[btc_data.index.notna()]
