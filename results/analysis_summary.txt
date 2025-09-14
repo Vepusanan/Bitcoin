@@ -1,7 +1,7 @@
 BITCOIN VOLATILITY ANALYSIS - SUMMARY REPORT
 ==================================================
 
-Analysis Date: 2025-09-13 17:44:08
+Analysis Date: 2025-09-14 18:14:39
 Data Period: 2020-01-31 to 2024-12-30
 Total Records: 1796
 Total Events: 62
