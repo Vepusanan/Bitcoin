@@ -108,8 +108,8 @@ if __name__ == "__main__":
         print(f"Error: CSV file not found at {data_path}")
         sys.exit(1)
 
-    # Load Bitcoin data with proper handling of multi-row headers
-    btc_data = pd.read_csv(data_path, skiprows=2)  # Skip the first 2 rows with metadata
+    # Load Bitcoin data
+    btc_data = pd.read_csv(data_path)
     btc_data['Date'] = pd.to_datetime(btc_data['Date'], errors='coerce')
     btc_data = btc_data.set_index('Date')
     btc_data = btc_data[btc_data.index.notna()]

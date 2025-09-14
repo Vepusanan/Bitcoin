@@ -1,8 +1,5 @@
-BITCOIN VOLATILITY ANALYSIS - DESCRIPTIVE STATISTICS
-==================================================
+Descriptive Statistics:
+{'returns': {'count': 1796, 'mean': np.float64(0.03116848147589422), 'std': np.float64(0.012486559316861509), 'min': np.float64(0.0088866858758699), 'max': np.float64(0.0913304954661284), 'median': np.float64(0.0289535369097273), 'skewness': np.float64(1.6880880675062908), 'kurtosis': np.float64(5.051394346400102), 'q25': np.float64(0.023161000313867974), 'q75': np.float64(0.03631269310678448)}, 'volatility': {'count': 1796, 'mean': np.float64(0.02250032212000065), 'std': np.float64(0.025040715293995718), 'min': np.float64(6.686879658768241e-06), 'max': np.float64(0.3716953856011707), 'median': np.float64(0.01458230297154665), 'skewness': np.float64(3.293579309330676), 'kurtosis': np.float64(25.44038770314992)}, 'prices': {'count': 1796, 'mean': np.float64(37516.458124173514), 'std': np.float64(21379.77119982213), 'min': np.float64(5331.833984375), 'max': np.float64(108268.4453125), 'median': np.float64(34384.9140625)}}
 
-DESCRIPTIVE STATISTICS:
-{'returns': {'count': 1796, 'mean': np.float64(0.0018442331500637783), 'std': 0.03361816278013953, 'min': -0.37169538560117077, 'max': 0.18746473766529936, 'median': 0.00064522706643666, 'skewness': np.float64(-0.527904187920352), 'kurtosis': np.float64(11.189949932960236), 'q25': np.float64(-0.013017383749254013), 'q75': np.float64(0.016367967124857108)}, 'volatility': {'count': 1796, 'mean': np.float64(0.031168481475894266), 'std': 0.012486559316861512, 'min': 0.008886685875869904, 'max': 0.09133049546612847, 'median': 0.028953536909727375, 'skewness': np.float64(1.6880880675062913), 'kurtosis': np.float64(5.051394346400103)}}
-
-NORMALITY TEST RESULTS:
-{'shapiro': {'statistic': np.float64(0.9150780138580287), 'p_value': np.float64(1.3491439000393288e-30), 'is_normal': np.False_}, 'kolmogorov_smirnov': {'statistic': np.float64(0.08866113922242644), 'p_value': np.float64(9.830544250749199e-13), 'is_normal': np.False_}, 'dagostino': {'statistic': np.float64(419.6358307036689), 'p_value': np.float64(7.537670662724158e-92), 'is_normal': np.False_}}
+Normality Test Results:
+{'shapiro': {'statistic': np.float64(0.8849135815706485), 'p_value': np.float64(1.405536357022825e-34), 'is_normal': np.False_}, 'kolmogorov_smirnov': {'statistic': np.float64(0.09299892089109796), 'p_value': np.float64(5.72339869731219e-14), 'is_normal': np.False_}, 'dagostino': {'statistic': np.float64(645.1141144664593), 'p_value': np.float64(8.227160022826826e-141), 'is_normal': np.False_}}
