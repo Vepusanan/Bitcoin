@@ -18,6 +18,7 @@ def create_events_database():
         {'date': '2020-12-17', 'event': 'Bitcoin breaks $20K all-time high', 'severity': 5, 'price_impact': 'positive'},
         {'date': '2020-12-30', 'event': 'Bitcoin ends year up 300%', 'severity': 4, 'price_impact': 'positive'},
         
+        # 2021 Events
         {'date': '2021-01-08', 'event': 'Bitcoin breaks $40K milestone', 'severity': 4, 'price_impact': 'positive'},
         {'date': '2021-01-11', 'event': 'Bitcoin correction from $42K to $30K', 'severity': 3, 'price_impact': 'negative'},
         {'date': '2021-02-09', 'event': 'Bitcoin surges to $48K on Tesla news', 'severity': 4, 'price_impact': 'positive'},
@@ -81,7 +82,6 @@ def create_events_database():
         {'date': '2024-11-22', 'event': 'Bitcoin briefly touches $99K approaching $100K', 'severity': 5, 'price_impact': 'positive'},
         {'date': '2024-12-05', 'event': 'Bitcoin consolidates in $95K-$100K range', 'severity': 3, 'price_impact': 'positive'}
     ]
-    
     # Create DataFrame
     events_df = pd.DataFrame(events_data)
     events_df['date'] = pd.to_datetime(events_df['date'])
@@ -113,4 +113,5 @@ def save_events_data(events_df, filename='market_events.csv'):
 if __name__ == "__main__":
     events = create_events_database()
     save_events_data(events)
-    print(events.head())
+    print(events.head()) 
+   

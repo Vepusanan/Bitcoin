@@ -12,7 +12,9 @@ def install_requirements():
     """Install required packages from requirements.txt"""
     print("Installing required packages...")
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
+        script_dir = Path(__file__).resolve().parent
+        req_file = script_dir / "requirements.txt"
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(req_file)])
         print("✓ All packages installed successfully!")
         return True
     except subprocess.CalledProcessError as e:
@@ -22,7 +24,9 @@ def install_requirements():
 def create_directories():
     """Create necessary directories"""
     print("Creating project directories...")
-    directories = ['data/raw', 'data/processed', 'results']
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parent
+    directories = [repo_root / 'data' / 'raw', repo_root / 'data' / 'processed', repo_root / 'results']
     
     for directory in directories:
         Path(directory).mkdir(parents=True, exist_ok=True)
@@ -45,16 +49,17 @@ def main():
         print("You can now run the analysis with:")
         print("  python main.py")
         print("\nOr install packages manually with:")
-        print("  pip install -r requirements.txt")
+        print("  pip install -r setup/requirements.txt")
     else:
         print("\n" + "=" * 50)
         print("SETUP FAILED!")
         print("=" * 50)
         print("Please install packages manually:")
-        print("  pip install -r requirements.txt")
+        print("  pip install -r setup/requirements.txt")
         return 1
     
     return 0
 
 if __name__ == "__main__":
     sys.exit(main())
+

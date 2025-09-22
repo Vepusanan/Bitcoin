@@ -32,7 +32,7 @@ def event_impact_analysis(btc_data, events_data, window_days=10):
 
         # Fill missing data with empty Series to avoid errors
         before_mean = before_data.mean() if len(before_data) > 0 else np.nan
-        after_mean = after_data.mean() if len(after_data) > 0 else np.nan
+        after_mean = after_data.mean() if len(after_data) > 0 else np.nan 
 
         # Perform t-test only if both have enough data
         if len(before_data) > 3 and len(after_data) > 3:
@@ -104,7 +104,7 @@ def correlation_analysis(btc_data, events_data, window_days=10):
             'p_value': np.nan,
             'significant': False
         }
-
+    
 
 if __name__ == "__main__":
     # Get project root directory

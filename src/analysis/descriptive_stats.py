@@ -21,8 +21,8 @@ def calculate_descriptive_stats(btc_data):
             btc_data[col] = pd.to_numeric(btc_data[col], errors='coerce')
 
     stats_dict = {}
-
-    # Returns
+    
+     # Returns
     if 'Daily_Return' in btc_data.columns:
         returns = btc_data['Daily_Return'].dropna()
         stats_dict['returns'] = {

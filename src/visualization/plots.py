@@ -4,13 +4,19 @@ from scipy import stats
 from pathlib import Path
 import sys
 
+
+#this fuction creates a time series visualization of bitcoin data
 def plot_bitcoin_timeseries(btc_data):
     """
     Create time series plots for Bitcoin price and volatility
     """
     fig, axes = plt.subplots(3, 1, figsize=(15, 12))
     
-    # Bitcoin price over time - handle different possible column names
+    # The code below ientify the correct column name for Bitcoin closing price.
+    # Different datasets may use variations (e.g., 'Close', 'BTC-USD', etc.),
+    # so we loop through possible options and select the first match.
+    # If none of the expected columns are found, print an error and exit early.
+
     close_col = None
     for col in ['Close', 'close', 'Close_', 'BTC-USD', 'Close_BTC-USD']:
         if col in btc_data.columns:
@@ -21,19 +27,20 @@ def plot_bitcoin_timeseries(btc_data):
         print(f"Error: No close price column found. Available columns: {btc_data.columns.tolist()}")
         return
     
+    # Bitcoin price plot
     axes[0].plot(btc_data.index, btc_data[close_col], color='orange', linewidth=1)
     axes[0].set_title('Bitcoin Price Over Time (2020-2024)', fontsize=14, fontweight='bold')
     axes[0].set_ylabel('Price (USD)')
     axes[0].grid(True, alpha=0.3)
     
-    # Daily returns
+    # Daily returns plot
     axes[1].plot(btc_data.index, btc_data['Daily_Return'], color='blue', alpha=0.7)
     axes[1].set_title('Bitcoin Daily Returns', fontsize=14, fontweight='bold')
     axes[1].set_ylabel('Daily Return (%)')
     axes[1].grid(True, alpha=0.3)
     axes[1].axhline(y=0, color='red', linestyle='--', alpha=0.5)
-    
-    # 30-day volatility
+
+    # 30-day volatility plot
     axes[2].plot(btc_data.index, btc_data['Volatility_30d'], color='red', linewidth=1)
     axes[2].set_title('Bitcoin 30-Day Rolling Volatility', fontsize=14, fontweight='bold')
     axes[2].set_ylabel('Volatility (Std Dev)')
@@ -49,6 +56,8 @@ def plot_bitcoin_timeseries(btc_data):
     plt.show()
 
 
+
+# This function creates distribution plots for bitcoin daily returns    
 def plot_distribution_analysis(btc_data):
     """
     Create distribution plots for Bitcoin returns
@@ -67,8 +76,9 @@ def plot_distribution_analysis(btc_data):
     returns = btc_data[returns_col].dropna()
     
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-    
-    # Histogram
+
+
+        # Histogram
     axes[0,0].hist(returns, bins=50, density=True, alpha=0.7, color='skyblue', edgecolor='black')
     axes[0,0].set_title('Distribution of Bitcoin Daily Returns')
     axes[0,0].set_xlabel('Daily Return')
@@ -98,6 +108,7 @@ def plot_distribution_analysis(btc_data):
     plt.show()
 
 
+    
 if __name__ == "__main__":
     # Define paths
     project_root = Path(__file__).resolve().parents[2]
@@ -108,8 +119,13 @@ if __name__ == "__main__":
         print(f"Error: CSV file not found at {data_path}")
         sys.exit(1)
 
-    # Load Bitcoin data
-    btc_data = pd.read_csv(data_path)
+    # Load Bitcoin data with proper handling of multi-row headers
+    btc_data = pd.read_csv(data_path, skiprows=2, header=0)
+    
+    # Set proper column names based on the first row of the original CSV
+    column_names = ['Date', 'Price', 'Close', 'High', 'Low', 'Open', 'Volume', 'Daily_Return', 'Volatility_30d', 'Abs_Return']
+    btc_data.columns = column_names
+    
     btc_data['Date'] = pd.to_datetime(btc_data['Date'], errors='coerce')
     btc_data = btc_data.set_index('Date')
     btc_data = btc_data[btc_data.index.notna()]
@@ -122,3 +138,6 @@ if __name__ == "__main__":
     plot_distribution_analysis(btc_data)
 
     print("Visualizations created successfully!")
+
+
+    

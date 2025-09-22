@@ -1,175 +1,132 @@
-# Bitcoin Volatility Analysis
+## Bitcoin Volatility Analysis (Statify)
 
-A comprehensive analysis of Bitcoin price volatility and its relationship with major market events from 2020-2024.
+Analyze Bitcoin price behavior, volatility regimes, and the impact of key market events. This repo includes data collection utilities, exploratory and analytical notebooks, and plotting utilities to reproduce the results.
 
-## Project Overview
-
-This project analyzes Bitcoin's price volatility patterns and investigates the impact of significant market events on Bitcoin's price movements. The analysis includes:
-
-- **Data Collection**: Bitcoin price data from Yahoo Finance and curated market events
-- **Descriptive Statistics**: Comprehensive statistical analysis of Bitcoin returns and volatility
-- **Distribution Analysis**: Testing for normality and fitting alternative distributions
-- **Event Impact Analysis**: Statistical testing of how market events affect Bitcoin volatility
-- **Visualization**: Time series plots, distribution plots, and event impact charts
-
-## Project Structure
-
-```
-Bitcoin/
-├── data/
-│   ├── raw/                    # Raw Bitcoin price data
-│   └── processed/              # Processed market events data
-├── src/
-│   ├── data_collection/        # Data collection modules
-│   │   ├── bitcoin_prices.py   # Bitcoin price data collection
-│   │   └── market_events.py    # Market events database
-│   ├── analysis/               # Analysis modules
-│   │   ├── descriptive_stats.py    # Descriptive statistics
-│   │   ├── distribution_analysis.py # Distribution testing
-│   │   └── hypothesis_tests.py     # Event impact analysis
-│   └── visualization/          # Visualization modules
-│       └── plots.py            # Plotting functions
-├── results/                    # Analysis results and plots
-├── main.py                     # Main execution script
-├── requirements.txt            # Python dependencies
-└── README.md                   # This file
-```
-
-## Installation
-
-1. **Clone or download the project**
-   ```bash
-   cd /path/to/Bitcoin
-   ```
-
-2. **Create a virtual environment (recommended)**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Usage
-
-### Quick Start
-
-Run the complete analysis pipeline:
-
-```bash
-python main.py
-```
-
-This will:
-1. Collect Bitcoin price data (2020-2024)
-2. Create market events database
-3. Perform descriptive statistics analysis
-4. Test distribution assumptions
-5. Analyze event impacts on volatility
-6. Generate visualizations
-7. Create summary report
-
-### Individual Modules
-
-You can also run individual analysis modules:
-
-```bash
-# Data collection
-python src/data_collection/bitcoin_prices.py
-python src/data_collection/market_events.py
-
-# Analysis
-python src/analysis/descriptive_stats.py
-python src/analysis/distribution_analysis.py
-python src/analysis/hypothesis_tests.py
-
-# Visualization
-python src/visualization/plots.py
-```
-
-## Dependencies
-
-- **pandas** (≥1.5.0): Data manipulation and analysis
-- **numpy** (≥1.21.0): Numerical computing
-- **yfinance** (≥0.2.0): Yahoo Finance data collection
-- **scipy** (≥1.9.0): Statistical functions
-- **matplotlib** (≥3.5.0): Plotting and visualization
-
-## Data Sources
-
-- **Bitcoin Prices**: Yahoo Finance (BTC-USD)
-- **Market Events**: Curated database of 62 major Bitcoin market events (2020-2024)
-
-## Analysis Methods
-
-### Descriptive Statistics
-- Mean, standard deviation, skewness, kurtosis
-- Quantile analysis
-- Volatility measures (30-day rolling standard deviation)
-
-### Distribution Analysis
-- Normality tests (Shapiro-Wilk, Kolmogorov-Smirnov, Anderson-Darling)
-- Alternative distribution fitting (t-distribution, skew-normal, Laplace, generalized extreme value)
-
-### Event Impact Analysis
-- Paired t-tests comparing pre/post event volatility
-- Correlation analysis between event severity and volatility changes
-- Statistical significance testing
-
-## Results
-
-The analysis generates several output files in the `results/` directory:
-
-- `descriptive_stats.txt`: Detailed statistical summary
-- `analysis_summary.txt`: Executive summary of findings
-- `bitcoin_timeseries.png`: Price and volatility time series
-- `distribution_analysis.png`: Return distribution plots
-- `event_*_impact.png`: Individual event impact charts
-
-## Key Findings
-
-The analysis reveals several important patterns in Bitcoin volatility:
-
-1. **Non-normal Distribution**: Bitcoin returns exhibit significant skewness and excess kurtosis
-2. **Event Sensitivity**: Major market events significantly impact Bitcoin volatility
-3. **Volatility Clustering**: High volatility periods tend to cluster together
-4. **Severity Correlation**: Event severity correlates with volatility changes
-
-## Technical Notes
-
-- **Data Period**: January 2020 - December 2024
-- **Frequency**: Daily data
-- **Missing Data**: Handled by forward-filling and dropping incomplete records
-- **Statistical Tests**: 5% significance level used throughout
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Import Errors**: Ensure all dependencies are installed and virtual environment is activated
-2. **Data Loading**: The script will automatically download fresh data if needed
-3. **Path Issues**: All scripts use relative paths from the project root
-4. **Memory Issues**: For large datasets, consider reducing the date range
-
-### Getting Help
-
-If you encounter issues:
-1. Check that all dependencies are installed correctly
-2. Ensure you're running from the project root directory
-3. Verify that the virtual environment is activated
-4. Check the console output for specific error messages
-
-## License
-
-This project is for educational and research purposes. Please cite appropriately if used in academic work.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests for improvements.
+### Contents
+- `src/`: Python modules for data collection, analysis, and visualization
+  - `data_collection/bitcoin_prices.py`: Download and process BTC price data
+  - `data_collection/market_events.py`: Curated event database and helpers
+  - `analysis/`: Descriptive stats, distribution analysis, hypothesis tests
+  - `visualization/plots.py`: Reusable plotting helpers
+- `data/`: Data directory
+  - `raw/`: Raw inputs (e.g., `bitcoin_prices.csv`)
+  - `processed/`: Processed/derived datasets (e.g., `market_events.csv`)
+- `notebooks/`: Jupyter notebooks for the main analysis
+  - `01_data_exploration.ipynb`: Robust loading + EDA + basic visuals
+  - `02_event_impact_analysis.ipynb`: Event windows and return impact
+  - `03_volatility_measures_comparison.ipynb`: Rolling volatility measures (std, Parkinson, Garman–Klass)
+  - `04_key_insights_summary.ipynb`: Synthesis of findings
+- `results/`: Saved figures/outputs
+- `setup/`: Setup and test utilities
+  - `setup.py`: Project bootstrap (creates folders, installs requirements)
+  - `requirements.txt`: Python dependencies
+  - `test_setup.py`: Quick verification of environment and structure
+- `main.py`: Example orchestrator/entry-point for scripted runs
 
 ---
 
-**Note**: This analysis is for educational purposes only and should not be considered as financial advice.
+### Quickstart
+1) Create and activate a virtual environment (recommended):
+```bash
+python -m venv .venv
+source .venv/bin/activate  # on macOS/Linux
+# .\.venv\Scripts\activate  # on Windows PowerShell
+```
+
+2) Install dependencies:
+```bash
+python setup/setup.py
+# or
+pip install -r setup/requirements.txt
+```
+
+3) Verify the setup (imports, structure, basic data collection):
+```bash
+python setup/test_setup.py
+```
+
+4) Run the analysis notebooks in `notebooks/` in the order listed above.
+
+---
+
+### Data
+- Bitcoin prices: pulled via `yfinance` or loaded from `data/raw/bitcoin_prices.csv`.
+- Market events: `data/processed/market_events.csv` (curated set); also reproducible via `src/data_collection/market_events.py`.
+
+Notes on CSV format:
+- The provided `bitcoin_prices.csv` uses a 3-line header pattern: first line contains field names, second line tickers, third line a `Date` marker. The notebooks contain loaders that handle this format using `skiprows=3` and custom column names `['Date'] + headers_from_line1`.
+
+---
+
+### How to Run
+- From notebooks (recommended for exploration): open each notebook and Run All.
+- From script: use `main.py` as an example orchestrator. You can adapt it to your workflow.
+
+Common commands:
+```bash
+# create data folders and install packages
+python setup/setup.py
+
+# verify environment and structure
+python setup/test_setup.py
+```
+
+---
+
+### Notebooks Overview
+- `01_data_exploration.ipynb`
+  - Robust data loading for the 3-line header CSV
+  - Summary statistics, null checks
+  - Close price and 30d volatility visualizations
+  - Events preview
+
+- `02_event_impact_analysis.ipynb`
+  - Computes daily returns
+  - Builds event windows (pre/post days) and aggregates relative-day returns
+  - Plots average return around events
+
+- `03_volatility_measures_comparison.ipynb`
+  - Computes 30d annualized volatility using:
+    - Standard deviation of returns
+    - Parkinson estimator
+    - Garman–Klass estimator
+  - Plots the measures side-by-side
+
+- `04_key_insights_summary.ipynb`
+  - Summarizes findings and links/embeds visuals from `results/`
+
+---
+
+### Testing
+Run the setup test to validate your environment:
+```bash
+python setup/test_setup.py
+```
+What it checks:
+- Package imports (pandas, numpy, yfinance, scipy, matplotlib)
+- Repo structure and key files (resolved from repo root)
+- Data collection: event dataset creation and a small BTC price fetch
+
+---
+
+### Troubleshooting
+- Requirements install fails
+  - Ensure you are using the project’s virtual environment
+  - Use: `pip install -r setup/requirements.txt`
+- Notebooks can’t find data files
+  - Confirm presence of `data/raw/bitcoin_prices.csv` and `data/processed/market_events.csv`
+  - Re-create folders with `python setup/setup.py`
+- CSV header parsing errors
+  - The notebooks assume a 3-line header format; if your CSV differs, adjust the loader cell accordingly
+
+---
+
+### Environment
+- Python 3.10+ recommended (project tested on Python 3.13 in a venv)
+- OS: macOS/Linux/Windows
+
+---
+
+### License
+This project is for academic/research purposes. If you intend to reuse or distribute, add an explicit license file and update this section accordingly.
+

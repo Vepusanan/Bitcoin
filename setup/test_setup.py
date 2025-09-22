@@ -34,11 +34,12 @@ def test_imports():
 def test_project_structure():
     """Test if project structure is correct"""
     print("\nTesting project structure...")
-    
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parent
     required_files = [
         'main.py',
-        'requirements.txt',
-        'setup.py',
+        'setup/requirements.txt',
+        'setup/setup.py',
         'src/data_collection/bitcoin_prices.py',
         'src/data_collection/market_events.py',
         'src/analysis/descriptive_stats.py',
@@ -50,7 +51,7 @@ def test_project_structure():
     missing_files = []
     
     for file_path in required_files:
-        if Path(file_path).exists():
+        if (repo_root / file_path).exists():
             print(f"✓ {file_path}")
         else:
             print(f"✗ {file_path}")
@@ -61,10 +62,11 @@ def test_project_structure():
 def test_data_collection():
     """Test data collection functions"""
     print("\nTesting data collection functions...")
-    
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parent
     try:
         # Add src to path
-        sys.path.insert(0, str(Path('src')))
+        sys.path.insert(0, str(repo_root / 'src'))
         
         from data_collection.bitcoin_prices import collect_bitcoin_data
         from data_collection.market_events import create_events_database
@@ -110,7 +112,7 @@ def main():
     
     if failed_imports:
         print(f"✗ Failed imports: {', '.join(failed_imports)}")
-        print("  Run: pip install -r requirements.txt")
+        print("  Run: pip install -r setup/requirements.txt")
     else:
         print("✓ All imports successful")
     
